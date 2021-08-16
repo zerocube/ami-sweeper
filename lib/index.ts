@@ -23,7 +23,8 @@ export class AmiSweeper extends cdk.Construct {
   constructor(scope: cdk.Construct, id: string, props: AmiSweeperProps = {
     lambdaTimeout: cdk.Duration.minutes(1),
     lambdaRetries: 2,
-    imageTags: [{ name: "deleteme", value: "true" }]
+    imageTags: [{ name: "deleteme", value: "true" }],
+    schedule: Schedule.rate(cdk.Duration.days(7)),
   }) {
     super(scope, id);
 

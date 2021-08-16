@@ -1,5 +1,9 @@
 {
   "name": "ami-sweeper",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zerocube/ami-sweeper.git"
+  },
   "version": "0.1.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
