@@ -4,3 +4,8 @@
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+
+# Github Workflows
+/.github
+/jest.config.js
+tsconfig.json
