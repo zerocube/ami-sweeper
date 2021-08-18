@@ -1,8 +1,11 @@
 {
-  "name": "ami-sweeper",
+  "name": "@zerocube/ami-sweeper",
   "repository": {
     "type": "git",
     "url": "https://github.com/zerocube/ami-sweeper.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "version": "0.1.0",
   "main": "lib/index.js",
