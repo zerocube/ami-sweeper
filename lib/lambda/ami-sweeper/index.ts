@@ -7,7 +7,7 @@ export interface ImageTag {
   value: string
 }
 
-interface LambdaEvent {
+export interface LambdaEvent {
   imageTags: ImageTag[]
   dryRun?: boolean
   verbose?: boolean

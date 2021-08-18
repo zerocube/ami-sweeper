@@ -7,11 +7,12 @@ import { PolicyStatement } from '@aws-cdk/aws-iam';
 import { Rule, RuleTargetInput, Schedule } from '@aws-cdk/aws-events';
 import { LambdaFunction as LambdaFunctionEventsTarget } from '@aws-cdk/aws-events-targets';
 import { ImageTag } from './lambda/ami-sweeper';
+import { LambdaEvent } from './lambda/ami-sweeper';
 
 export interface AMISweeperProps {
   lambdaTimeout?: cdk.Duration
   lambdaRetries?: number
-  schedule?: Schedule
+  schedule: Schedule
   imageTags: ImageTag[]
 }
 
@@ -54,7 +55,11 @@ export class AMISweeper extends cdk.Construct {
       // Documentation: https://docs.aws.amazon.com/lambda/latest/dg/services-cloudwatchevents-expressions.html
       schedule: props.schedule,
       targets: [new LambdaFunctionEventsTarget(this.lambdaFunction, {
-        event: RuleTargetInput.fromObject({ tags: props.imageTags })
+        event: RuleTargetInput.fromObject(
+          {
+            imageTags: props.imageTags,
+          } as LambdaEvent
+        ),
       })]
     });
   }
