@@ -8,19 +8,19 @@ import { Rule, RuleTargetInput, Schedule } from '@aws-cdk/aws-events';
 import { LambdaFunction as LambdaFunctionEventsTarget } from '@aws-cdk/aws-events-targets';
 import { ImageTag } from './lambda/ami-sweeper';
 
-export interface AmiSweeperProps {
+export interface AMISweeperProps {
   lambdaTimeout: cdk.Duration
   lambdaRetries: number
   schedule?: Schedule
   imageTags: ImageTag[]
 }
 
-export class AmiSweeper extends cdk.Construct {
+export class AMISweeper extends cdk.Construct {
 
   public readonly lambdaFunction: LambdaFunction
   public readonly scheduledEventRule: Rule
 
-  constructor(scope: cdk.Construct, id: string, props: AmiSweeperProps = {
+  constructor(scope: cdk.Construct, id: string, props: AMISweeperProps = {
     lambdaTimeout: cdk.Duration.minutes(1),
     lambdaRetries: 2,
     imageTags: [{ name: "deleteme", value: "true" }],
