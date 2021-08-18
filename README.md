@@ -1,3 +1,3 @@
 # AMI Sweeper
 
-A Lambda function to help clean up old AMIs.
+A CDK Construct that provides a Lambda function to help clean up old AMIs.
