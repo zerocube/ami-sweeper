@@ -9,8 +9,8 @@ import { LambdaFunction as LambdaFunctionEventsTarget } from '@aws-cdk/aws-event
 import { ImageTag } from './lambda/ami-sweeper';
 
 export interface AMISweeperProps {
-  lambdaTimeout: cdk.Duration
-  lambdaRetries: number
+  lambdaTimeout?: cdk.Duration
+  lambdaRetries?: number
   schedule?: Schedule
   imageTags: ImageTag[]
 }
@@ -23,7 +23,7 @@ export class AMISweeper extends cdk.Construct {
   constructor(scope: cdk.Construct, id: string, props: AMISweeperProps = {
     lambdaTimeout: cdk.Duration.minutes(1),
     lambdaRetries: 2,
-    imageTags: [{ name: "deleteme", value: "true" }],
+    imageTags: [{ name: "ami-sweeper", value: "true" }],
     schedule: Schedule.rate(cdk.Duration.days(7)),
   }) {
     super(scope, id);
