@@ -11,20 +11,24 @@ export interface LambdaEvent {
   imageTags: ImageTag[]
   dryRun?: boolean
   verbose?: boolean
+  debug?: boolean
   deleteFirst?: boolean
 }
 
 async function processEvent(event: LambdaEvent) {
 
-  if (event.verbose) {
-    console.log("Received event:", JSON.stringify(event));
-  }
-  // We need to retrieve all AMIs.
+  event.verbose && console.log("Received event:", JSON.stringify(event));
+
   var ec2 = new EC2();
+
+  let ec2ImageFilters: EC2.FilterList = event.imageTags.map((t) => {
+    return { Name: t.name, Values: [t.value] }
+  });
+
+  event.debug && console.log("EC2 Image Filters:\n", JSON.stringify(ec2ImageFilters))
+
   let images = await ec2.describeImages({
-    Filters: event.imageTags.map((t) => {
-      return { Name: t.name, Values: [t.value] }
-    })
+    Filters: ec2ImageFilters,
   }).promise();
 
   if (!images.Images) {
