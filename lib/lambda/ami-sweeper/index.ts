@@ -22,7 +22,7 @@ async function processEvent(event: LambdaEvent) {
   var ec2 = new EC2();
 
   let ec2ImageFilters: EC2.FilterList = event.imageTags.map((t) => {
-    return { Name: t.name, Values: [t.value] }
+    return { Name: `tag:${t.name}`, Values: [t.value] } as EC2.Filter
   });
 
   event.debug && console.log("EC2 Image Filters:\n", JSON.stringify(ec2ImageFilters))
@@ -135,6 +135,7 @@ exports.handler = async (event: LambdaEvent, context: any): Promise<any> => {
 if (process.env.RUN_LOCALLY?.trim().toLowerCase() == "true") {
   processEvent({
     imageTags: [{ name: "deleteme", value: "true" }],
+    debug: true,
     dryRun: true,
     verbose: true,
   });

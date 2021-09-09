@@ -30,7 +30,7 @@ export class AMISweeper extends cdk.Construct {
     super(scope, id);
 
     // Define construct contents here
-    this.lambdaFunction = new LambdaFunction(this, "SweeperLambda", {
+    this.lambdaFunction = new LambdaFunction(this, "Lambda", {
       runtime: Runtime.NODEJS_14_X,
       handler: "index.handler",
       code: Code.fromAsset(path.join(__dirname, 'lambda', 'ami-sweeper')),
@@ -51,7 +51,7 @@ export class AMISweeper extends cdk.Construct {
       ],
     });
 
-    new Rule(this, `SweeperScheduleRule`, {
+    new Rule(this, `ScheduleRule`, {
       // Documentation: https://docs.aws.amazon.com/lambda/latest/dg/services-cloudwatchevents-expressions.html
       schedule: props.schedule,
       targets: [new LambdaFunctionEventsTarget(this.lambdaFunction, {
