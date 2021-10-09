@@ -1,7 +1,8 @@
 name: Run Tests
 
 on:
-  push: {}
+  push:
+    branches-ignore: [main]
 
 jobs:
   test:
@@ -22,19 +23,3 @@ jobs:
         run: |
           npm ci
           npm run test
-  build:
-    name: NPM Build
-    runs-on: ubuntu-20.04
-    container:
-      image: "node:14"
-    steps:
-      - uses: actions/checkout@v2
-      # Setup .npmrc file to publish to GitHub Packages
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      - run: |
-          npm ci
-          (cd lib/lambda/ami-sweeper && npm ci && npm run build)
-          npm run build
-          find . | grep -v node_modules
