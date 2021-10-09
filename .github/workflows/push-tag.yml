@@ -1,7 +1,8 @@
 name: Publish NodeJS Package
 
 on:
-  push: {}
+  push:
+    tags: ["v*"]
 
 jobs:
 
@@ -19,8 +20,8 @@ jobs:
   build_and_publish:
     name: "Build and Publish"
     needs: [metadata]
-    runs-on: ubuntu-latest 
-    permissions: 
+    runs-on: ubuntu-20.04
+    permissions:
       contents: read
       packages: write
     steps:
@@ -53,7 +54,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Publish with the latest tag
-      - if: ${{ github.ref == '/refs/heads/main' }}
+      - if: ${{ needs.metadata.outputs.branch_name == 'main' }}
         run: npm publish --access public --tag latest
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

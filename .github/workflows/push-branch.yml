@@ -1,0 +1,36 @@
+name: Publish NodeJS Package
+
+on:
+  push:
+    branches: ["*"]
+
+jobs:
+  bump_version:
+    name: "Bump NPM version"
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+      packages: write
+    steps:
+
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - run: |
+          npm ci
+          (cd lib/lambda/ami-sweeper && npm ci && npm run build)
+          npm run build
+
+      - name: Create NPM patch version
+        run: |
+          git config user.name '${{ github.actor }}'
+          git config user.email '${{ github.actor }}@users.noreply.github.com'
+          npm version patch
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
