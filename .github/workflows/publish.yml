@@ -41,7 +41,12 @@ jobs:
         run: |
           git config --global user.name '${{ github.actor }}'
           git config --global user.email '${{ github.actor }}@users.noreply.github.com'
-          npm version patch && git push
+          npm version patch
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
       - run: npm publish --access public --tag ${{ needs.metadata.outputs.branch_name }}
         env:
