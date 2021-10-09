@@ -2,7 +2,7 @@ name: Publish NodeJS Package
 
 on:
   push:
-    tags: ["v.*"]
+    tags: ["v*"]
 
 jobs:
 
