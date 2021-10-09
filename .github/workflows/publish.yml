@@ -36,6 +36,11 @@ jobs:
           npm ci
           (cd lib/lambda/ami-sweeper && npm ci && npm run build)
           npm run build
+
+      - name: Update version and publish
+        run: |
+          git config --global user.name '${{ github.actor }}'
+          git config --global user.email '${{ github.actor }}@users.noreply.github.com'
           npm version patch && git push
 
       - run: npm publish --access public --tag ${{ needs.metadata.outputs.branch_name }}
