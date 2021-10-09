@@ -19,8 +19,8 @@ jobs:
   build_and_publish:
     name: "Build and Publish"
     needs: [metadata]
-    runs-on: ubuntu-latest 
-    permissions: 
+    runs-on: ubuntu-latest
+    permissions:
       contents: read
       packages: write
     steps:
@@ -36,6 +36,7 @@ jobs:
           npm ci
           (cd lib/lambda/ami-sweeper && npm ci && npm run build)
           npm run build
+          npm version patch && git push
 
       - run: npm publish --access public --tag ${{ needs.metadata.outputs.branch_name }}
         env:
