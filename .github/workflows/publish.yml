@@ -19,9 +19,9 @@ jobs:
   build_and_publish:
     name: "Build and Publish"
     needs: [metadata]
-    runs-on: ubuntu-latest 
-    permissions: 
-      contents: read
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
       packages: write
     steps:
 
@@ -36,6 +36,17 @@ jobs:
           npm ci
           (cd lib/lambda/ami-sweeper && npm ci && npm run build)
           npm run build
+
+      - name: Update version and publish
+        run: |
+          git config user.name '${{ github.actor }}'
+          git config user.email '${{ github.actor }}@users.noreply.github.com'
+          npm version patch
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
       - run: npm publish --access public --tag ${{ needs.metadata.outputs.branch_name }}
         env:
