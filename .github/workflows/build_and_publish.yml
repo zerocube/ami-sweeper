@@ -57,12 +57,6 @@ jobs:
           (cd lib/lambda/ami-sweeper && npm ci && npm run build)
           npm run build
 
-      - name: Create NPM patch version
-        run: |
-          git config user.name '${{ github.actor }}'
-          git config user.email '${{ github.actor }}@users.noreply.github.com'
-          npm version patch
-
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
