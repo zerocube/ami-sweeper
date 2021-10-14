@@ -31,8 +31,13 @@ jobs:
           node-version: '14'
           cache: npm
 
+      - name: Install NPM Packages
+        run: |
+          npm ci
+          (cd lib/lambda/ami-sweeper && npm ci && npm run build)
+
       - name: 🏃🏻 Run NPM Tests
-        run: npm ci && npm run test
+        run: npm run test
 
   version:
     name: Bump Patch Version
@@ -78,7 +83,6 @@ jobs:
 
       - run: |
           npm ci
-          (cd lib/lambda/ami-sweeper && npm ci && npm run build)
           npm run build
 
       # Push to GitHub Packages
@@ -113,7 +117,6 @@ jobs:
 
       - run: |
           npm ci
-          (cd lib/lambda/ami-sweeper && npm ci && npm run build)
           npm run build
 
       # Push to GitHub Packages

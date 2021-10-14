@@ -11,6 +11,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "preinstall": "cd lib/lambda/ami-sweeper && npm ci && npm run build",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest"
