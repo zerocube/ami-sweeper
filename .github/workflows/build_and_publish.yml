@@ -66,6 +66,8 @@ jobs:
     steps:
 
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.metadata.outputs.branch_name }}
 
       # Setup .npmrc file to publish to GitHub Packages
       - uses: actions/setup-node@v2
@@ -99,6 +101,8 @@ jobs:
     steps:
 
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.metadata.outputs.branch_name }}
 
       # Push to NPM registry
       - uses: actions/setup-node@v2
