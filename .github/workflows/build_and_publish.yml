@@ -34,12 +34,39 @@ jobs:
       - name: 🏃🏻 Run NPM Tests
         run: npm ci && npm run test
 
-  build_and_publish:
-    name: "Build and Publish"
-    needs: [metadata, test]
+  version:
+    name: Bump Patch Version
     runs-on: ubuntu-20.04
     permissions:
       contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+
+      # - uses: actions/setup-node@v2
+      #   with:
+      #     node-version: '14'
+
+      # - run: npm ci
+
+      - name: Create NPM patch version
+        run: |
+          git config user.name '${{ github.actor }}'
+          git config user.email '${{ github.actor }}@users.noreply.github.com'
+          npm version patch
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  publish_github:
+    name: "Publish Github NPM Module"
+    needs: [metadata, test, version]
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: read
       packages: write
     steps:
 
@@ -57,18 +84,6 @@ jobs:
           (cd lib/lambda/ami-sweeper && npm ci && npm run build)
           npm run build
 
-      - name: Create NPM patch version
-        run: |
-          git config user.name '${{ github.actor }}'
-          git config user.email '${{ github.actor }}@users.noreply.github.com'
-          npm version patch
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-
       # Push to GitHub Packages
       - if: ${{ needs.metadata.outputs.branch_name != 'main' }}
         run: npm publish --access public --tag ${{ needs.metadata.outputs.branch_name }}
@@ -79,6 +94,17 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  publish_npm:
+    name: "Publish Public NPM Module"
+    needs: [metadata, test, version]
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+
+      - uses: actions/checkout@v2
+
       # Push to NPM registry
       - uses: actions/setup-node@v2
         with:
@@ -86,9 +112,18 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@zerocube'
 
-      - name: Publish to public NPM registry
-        run: |
-          npm config set registry https://registry.npmjs.org/
-          npm publish --access public --tag ${{ needs.metadata.outputs.branch_name }}
+      - run: |
+          npm ci
+          (cd lib/lambda/ami-sweeper && npm ci && npm run build)
+          npm run build
+
+      # Push to GitHub Packages
+      - if: ${{ needs.metadata.outputs.branch_name != 'main' }}
+        run: npm publish --access public --tag ${{ needs.metadata.outputs.branch_name }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTOMATION_TOKEN }}
+
+      - if: ${{ needs.metadata.outputs.branch_name == 'main' }}
+        run: npm publish --access public --tag latest
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTOMATION_TOKEN }}
