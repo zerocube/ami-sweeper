@@ -7,10 +7,11 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
-  "version": "0.1.11",
+  "version": "0.2.5",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "preinstall": "cd lib/lambda/ami-sweeper && npm ci && npm run build",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest"
