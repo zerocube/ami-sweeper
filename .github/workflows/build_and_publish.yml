@@ -36,7 +36,7 @@ jobs:
 
   build_and_publish:
     name: "Build and Publish"
-    needs: [metadata]
+    needs: [metadata, test]
     runs-on: ubuntu-20.04
     permissions:
       contents: write
@@ -56,6 +56,12 @@ jobs:
           npm ci
           (cd lib/lambda/ami-sweeper && npm ci && npm run build)
           npm run build
+
+      - name: Create NPM patch version
+        run: |
+          git config user.name '${{ github.actor }}'
+          git config user.email '${{ github.actor }}@users.noreply.github.com'
+          npm version patch
 
       - name: Push changes
         uses: ad-m/github-push-action@master
@@ -80,6 +86,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@zerocube'
 
-      - run: npm publish --access public --tag ${{ needs.metadata.outputs.branch_name }}
+      - name: Publish to public NPM registry
+        run: |
+          npm config set registry https://registry.npmjs.org/
+          npm publish --access public --tag ${{ needs.metadata.outputs.branch_name }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTOMATION_TOKEN }}
