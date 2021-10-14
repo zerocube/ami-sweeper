@@ -36,8 +36,12 @@ jobs:
 
   version:
     name: Bump Patch Version
+    runs-on: ubuntu-20.04
     container:
       image: "node:14"
+    permissions:
+      contents: write
+      packages: write
     steps:
       - uses: actions/checkout@v2
 
@@ -55,11 +59,10 @@ jobs:
 
   publish_github:
     name: "Publish Github NPM Module"
-    name: "Build and Publish"
     needs: [metadata, test, version]
     runs-on: ubuntu-20.04
     permissions:
-      contents: write
+      contents: read
       packages: write
     steps:
 
@@ -92,7 +95,7 @@ jobs:
     needs: [metadata, test, version]
     runs-on: ubuntu-20.04
     permissions:
-      contents: write
+      contents: read
       packages: write
     steps:
 
