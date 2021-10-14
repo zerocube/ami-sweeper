@@ -7,7 +7,7 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
-  "version": "0.2.8",
+  "version": "0.2.9-test-chore.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
