@@ -41,6 +41,7 @@ jobs:
 
   version:
     name: Bump Patch Version
+    needs: [metadata]
     runs-on: ubuntu-20.04
     concurrency: versioning
     permissions:
@@ -49,11 +50,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Create NPM patch version
+      - name: Configure git
         run: |
           git config user.name '${{ github.actor }}'
           git config user.email '${{ github.actor }}@users.noreply.github.com'
-          npm version patch
+
+      - if: ${{ needs.metadata.outputs.branch_name == 'main' }}
+        name: Create NPM patch version
+        run: npm version patch
+      - if: ${{ needs.metadata.outputs.branch_name != 'main' }}
+        name: Create NPM patch version
+        run: npm version --preid "${{ needs.metadata.outputs.branch_name }}" patch
 
       - name: Push changes
         uses: ad-m/github-push-action@master
