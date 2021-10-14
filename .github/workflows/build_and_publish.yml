@@ -49,6 +49,8 @@ jobs:
         with:
           node-version: '14'
 
+      - run: npm ci
+
       - name: Create NPM patch version
         run: |
           git config user.name '${{ github.actor }}'
