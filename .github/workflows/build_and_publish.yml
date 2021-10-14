@@ -60,7 +60,7 @@ jobs:
         run: npm version patch
       - if: ${{ needs.metadata.outputs.branch_name != 'main' }}
         name: Create NPM patch version
-        run: npm version patch --preid "${{ needs.metadata.outputs.branch_name }}"
+        run: npm version prepatch --preid "${{ needs.metadata.outputs.branch_name }}"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
