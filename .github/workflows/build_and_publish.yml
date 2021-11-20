@@ -41,7 +41,7 @@ jobs:
 
   version:
     name: Bump Version
-    needs: [metadata]
+    needs: [metadata, test]
     runs-on: ubuntu-20.04
     concurrency: versioning
     permissions:
