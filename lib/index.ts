@@ -16,7 +16,7 @@ export interface AMISweeperProps {
   imageTags: ImageTag[]
 }
 
-export default class AMISweeper extends cdk.Construct {
+export class AMISweeper extends cdk.Construct {
 
   public readonly lambdaFunction: LambdaFunction
   public readonly scheduledEventRule: Rule
