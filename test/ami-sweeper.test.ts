@@ -1,4 +1,4 @@
-import { expect as expectCDK, countResources } from '@aws-cdk/assert';
+import { expect as expectCDK, haveResource, not } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
 import { AMISweeper } from '../lib/index';
 
@@ -11,5 +11,5 @@ test('SNS Topic Created', () => {
   // WHEN
   new AMISweeper(stack, 'MyTestConstruct');
   // THEN
-  expectCDK(stack).to(countResources("AWS::SNS::Topic", 0));
+  expectCDK(stack).to(not(haveResource("AWS::SNS::Topic")));
 });
