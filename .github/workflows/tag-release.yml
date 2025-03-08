@@ -5,23 +5,21 @@ on:
     tags: ["v[0-9]+.[0-9]+.[0-9]+"]
 
 jobs:
-
   publish_github:
     name: "Publish Github NPM Module"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     steps:
-
       - uses: actions/checkout@v2
 
       # Setup .npmrc file to publish to GitHub Packages
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@zerocube'
+          node-version: "16"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@zerocube"
 
       - run: |
           npm ci
@@ -34,12 +32,11 @@ jobs:
 
   publish_npm:
     name: "Publish Public NPM Module"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     steps:
-
       - uses: actions/checkout@v2
         with:
           ref: ${{ needs.metadata.outputs.branch_name }}
@@ -47,9 +44,9 @@ jobs:
       # Push to NPM registry
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@zerocube'
+          node-version: "16"
+          registry-url: "https://registry.npmjs.org"
+          scope: "@zerocube"
 
       - run: |
           npm ci
